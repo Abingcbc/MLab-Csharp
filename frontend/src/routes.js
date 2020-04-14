@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-// import Content from '@/components/Content/Content.vue';
+import HomePage from "@/components/HomePage";
 import Login from '@/components/Login'
 import Register from "@/components/Register";
 import Lab from '@/components/Lab'
-// import Community from "@/components/Community";
+import Community from "@/components/Community";
+import CreatePost from "@/components/CreatePost";
+import PostDetail from "@/components/PostDetail";
 
 Vue.use(Router);
 
@@ -13,10 +15,12 @@ export default new Router({
     mode: 'history',
     base: '',
     routes: [
-        // {path: '/', component: Content, name: 'home'},
+        {path: '/', component: HomePage, name: 'homepage'},
         {path: '/login', component: Login, name: 'login'},
         {path: '/register', component: Register, name: 'register'},
         {path: '/lab', component: Lab, name: 'lab'},
-        // {path: '/community', component: Community, name: 'community'}
+        {path: '/community', component: Community, name: 'community'},
+        {path: '/createPost', component: CreatePost},
+        {path: '/postDetail', component: PostDetail}
     ]
 });

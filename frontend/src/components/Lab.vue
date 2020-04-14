@@ -6,6 +6,33 @@
         <el-main>
             <div id="canvas"></div>
         </el-main>
+        <el-aside style="width: 150px">
+            <div id="tools">
+                <el-button id="title" type="text"
+                           style="font-size: 30px"
+                           @click="changeModelName">{{modelName}}</el-button>
+                <div class="operation">
+                    <el-button id="load" type="info" plain
+                               style="margin-top: 20px">Load</el-button>
+                    <el-dropdown style="margin-top: 20px;">
+                        <el-button id="export" type="info" plain>Export</el-button>
+                        <el-dropdown-menu>
+                            <el-dropdown-item @click.native="exportPng">.PNG</el-dropdown-item>
+                            <el-dropdown-item @click.native="exportJson">.JSON</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <el-button id="save" :loading="saving"
+                               @click="save" round
+                               style="display: block; margin-top: 20px"
+                    >Save</el-button>
+                    <el-button id="run" type="primary"
+                               icon="el-icon-video-play" circle
+                               style="display: block; margin-top: 20px"
+                               :loading="running"
+                               @click="run"/>
+                </div>
+            </div>
+        </el-aside>
     </el-container>
 </template>
 
@@ -247,5 +274,10 @@
         display: inline-block;
         margin-left: 20px;
         margin-top: 20px;
+    }
+
+    #tools {
+        float: right;
+        margin-right: 30px;
     }
 </style>

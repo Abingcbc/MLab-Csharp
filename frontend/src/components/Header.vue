@@ -4,13 +4,13 @@
                 class="el-menu-demo"
                 mode="horizontal"
                 active-text-color="#ffd04b">
-            <el-menu-item>
+            <el-menu-item @click.native="home">
                 <img src="../../public/logo_word.png" alt="" width="80" height="60"/>
             </el-menu-item>
             <el-menu-item @click.native="lab">
                 画板
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item @click.native="community">
                 社区
             </el-menu-item>
             <el-menu-item>
@@ -18,6 +18,11 @@
                           v-model="input">
                     <el-button slot="append" icon="el-icon-search"/>
                 </el-input>
+            </el-menu-item>
+            <el-menu-item v-if="isCommunity">
+                <el-button round type="primary" @click.native="createPost">
+                    写文章
+                </el-button>
             </el-menu-item>
             <el-submenu style="float: right" index="4">
                 <template slot="title">
@@ -41,12 +46,16 @@
             return {
                 input: '',
                 isLogin: false,
+                isCommunity: true,
                 avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
             };
         },
         methods: {
             handleSelect: () => {
 
+            },
+            home() {
+                this.$router.push('/')
             },
             login() {
                 if (this.$router.path !== '/login') {
@@ -57,6 +66,13 @@
                 if (this.$router.path !== '/lab') {
                     this.$router.push('/lab')
                 }
+            },
+            community() {
+                this.$router.push('/community?page=1');
+                this.isCommunity = true;
+            },
+            createPost() {
+                this.$router.push('/createPost')
             }
         }
     }
