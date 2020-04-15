@@ -10,10 +10,12 @@
             <div id="tools">
                 <el-button id="title" type="text"
                            style="font-size: 30px"
-                           @click="changeModelName">{{modelName}}</el-button>
+                           @click="changeModelName">{{modelName}}
+                </el-button>
                 <div class="operation">
                     <el-button id="load" type="info" plain
-                               style="margin-top: 20px">Load</el-button>
+                               style="margin-top: 20px">Load
+                    </el-button>
                     <el-dropdown style="margin-top: 20px;">
                         <el-button id="export" type="info" plain>Export</el-button>
                         <el-dropdown-menu>
@@ -24,7 +26,8 @@
                     <el-button id="save" :loading="saving"
                                @click="save" round
                                style="display: block; margin-top: 20px"
-                    >Save</el-button>
+                    >Save
+                    </el-button>
                     <el-button id="run" type="primary"
                                icon="el-icon-video-play" circle
                                style="display: block; margin-top: 20px"
@@ -58,10 +61,15 @@
                     {direction: 0}),
                 "undoManager.isEnabled": true,
             });
-            context.myDiagram.addDiagramListener("Modified", function () {
-                var button = document.getElementById("SaveButton");
-                if (button) button.disabled = !this.myDiagram.isModified;
-            });
+            context.myDiagram.addDiagramListener("ObjectDoubleClicked",
+                function (event) {
+                    const part = event.subject.part;
+                    console.log(part.data);
+                    context.$alert('<strong>这是 <i>HTML</i> 片段</strong>', 'HTML 片段', {
+                        dangerouslyUseHTMLString: true
+                    });
+                }
+            );
 
             this.makeTemplate("Table", "forestgreen",
                 [],
@@ -131,7 +139,8 @@
                     "{\"from\":51, \"frompid\":\"OUT\", \"to\":61},\n" +
                     "{\"from\":61, \"frompid\":\"OUT\", \"to\":71}\n" +
                     "  ]}");
-            },
+            }
+            ,
             makePort(name, leftside) {
                 var port = MAKE(go.Shape, "Rectangle",
                     {
@@ -165,7 +174,8 @@
                     panel.add(port);
                 }
                 return panel;
-            },
+            }
+            ,
             makeTemplate(typename, background, inports, outports) {
                 var node = MAKE(go.Node, "Spot",
                     MAKE(go.Panel, "Auto",
@@ -210,12 +220,13 @@
                         outports)
                 );
                 this.myDiagram.nodeTemplateMap.add(typename, node);
-            },
+            }
+            ,
             changeModelName() {
                 this.$prompt('New Model Name', {
                     confirmButtonText: 'Confirm',
                     cancelButtonText: 'Cancel',
-                }).then(({ value }) => {
+                }).then(({value}) => {
                     this.$message({
                         type: 'success',
                         message: value
@@ -223,13 +234,16 @@
                     this.modelName = value;
                 }).catch(() => {
                 });
-            },
+            }
+            ,
             run() {
                 this.running = true;
-            },
+            }
+            ,
             save() {
                 this.saving = true;
-            },
+            }
+            ,
             exportPng() {
                 this.myDiagram.makeImageData({
                     returnType: "blob", callback: (blob) => {
@@ -242,17 +256,19 @@
                         document.body.removeChild(tempElement);
                     }
                 });
-            },
+            }
+            ,
             exportJson() {
                 const tempElement = document.createElement('a');
-                tempElement.download = this.modelName+'.json';
+                tempElement.download = this.modelName + '.json';
                 tempElement.style.display = "None";
                 const blob = new Blob([this.myDiagram.model.toJson()]);
                 tempElement.href = URL.createObjectURL(blob);
                 document.body.appendChild(tempElement);
                 tempElement.click();
                 document.body.removeChild(tempElement);
-            },
+            }
+            ,
         }
     }
 </script>
