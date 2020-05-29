@@ -1,6 +1,7 @@
 <template>
-    <div style="margin-left: 200px;margin-right: 200px">
-        <el-card id="post" v-for="postData in postList" :key="postData.id">
+    <div style="margin-left: 200px;margin-right: 200px;">
+
+        <el-card class="post" v-for="postData in postList" :key="postData.id">
             <el-row style="font-size: 30px">{{ postData.title }}</el-row>
             <el-container>
                 <el-aside style="width: 150px">
@@ -40,7 +41,7 @@
 
 <script>
     export default {
-        name: "MyPost",
+        name: "Post",
         data() {
             return {
                 postList: [],
@@ -72,5 +73,7 @@
 </script>
 
 <style>
-
+#post {
+    width: 10%;
+}
 </style>

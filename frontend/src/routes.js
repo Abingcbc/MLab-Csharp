@@ -9,8 +9,8 @@ import Community from "@/components/Community";
 import CreatePost from "@/components/CreatePost";
 import PostDetail from "@/components/PostDetail";
 import Profile from "@/components/Profile";
-import MyModel from "@/components/MyModel";
-import MyPost from "@/components/MyPost";
+import Container from "@/components/Container";
+import Post from "@/components/Post";
 
 Vue.use(Router);
 
@@ -26,7 +26,7 @@ export default new Router({
         {path: '/createPost', component: CreatePost},
         {path: '/postDetail', component: PostDetail},
         {path: '/profile', component: Profile},
-        {path: '/myModel', component: MyModel},
-        {path: '/myPost', component: MyPost}
+        {path: '/container', component: Container},
+        {path: '/post', component: Post}
     ]
 });

@@ -1,105 +1,112 @@
-ALTER TABLE `DATASET` DROP FOREIGN KEY `fk_DATASET`;
-ALTER TABLE `MLMODEL` DROP FOREIGN KEY `fk_MODEL`;
-ALTER TABLE `HISTORY` DROP FOREIGN KEY `fk_HISTORY`;
-ALTER TABLE `HISTORY` DROP FOREIGN KEY `fk_HISTORY_2`;
-ALTER TABLE `POST` DROP FOREIGN KEY `fk_POST`;
-ALTER TABLE `LIKES` DROP FOREIGN KEY `fk_LIKE`;
-ALTER TABLE `REPLY` DROP FOREIGN KEY `fk_REPLY`;
-ALTER TABLE `REPLY` DROP FOREIGN KEY `fk_REPLY_1`;
-ALTER TABLE `COMMENT` DROP FOREIGN KEY `fk_COMMENT`;
-ALTER TABLE `COMMENT` DROP FOREIGN KEY `fk_COMMENT_1`;
-ALTER TABLE `POST` DROP FOREIGN KEY `fk_POST_1`;
+ALTER TABLE `Dataset` DROP FOREIGN KEY `fk_DATASET`;
+ALTER TABLE `MLModel` DROP FOREIGN KEY `fk_MODEL`;
+ALTER TABLE `Post` DROP FOREIGN KEY `fk_POST`;
+ALTER TABLE `Likes` DROP FOREIGN KEY `fk_LIKE`;
+ALTER TABLE `Reply` DROP FOREIGN KEY `fk_REPLY`;
+ALTER TABLE `Reply` DROP FOREIGN KEY `fk_REPLY_1`;
+ALTER TABLE `Comment` DROP FOREIGN KEY `fk_COMMENT`;
+ALTER TABLE `Comment` DROP FOREIGN KEY `fk_COMMENT_1`;
+ALTER TABLE `Post` DROP FOREIGN KEY `fk_POST_1`;
+ALTER TABLE `Container` DROP FOREIGN KEY `fk_Container`;
+ALTER TABLE `ContainerOrder` DROP FOREIGN KEY `fk_ContainerOrder`;
 
-DROP TABLE `USER`;
-DROP TABLE `DATASET`;
-DROP TABLE `MLMODEL`;
-DROP TABLE `HISTORY`;
-DROP TABLE `POST`;
-DROP TABLE `LIKES`;
-DROP TABLE `REPLY`;
-DROP TABLE `COMMENT`;
+DROP TABLE `User`;
+DROP TABLE `Dataset`;
+DROP TABLE `MLModel`;
+DROP TABLE `Post`;
+DROP TABLE `Likes`;
+DROP TABLE `Reply`;
+DROP TABLE `Comment`;
+DROP TABLE `ContainerOrder`;
+DROP TABLE `Container`;
 
-CREATE TABLE `USER` (
+CREATE TABLE `User` (
 `username` varchar(255) NOT NULL,
 `password` varchar(255) NOT NULL,
 PRIMARY KEY (`username`) 
 );
-CREATE TABLE `DATASET` (
-`dataset_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Dataset` (
+`datasetId` int(11) NOT NULL AUTO_INCREMENT,
 `username` varchar(255) NULL,
-`dataset_name` varchar(255) NULL,
+`datasetName` varchar(255) NULL,
 `format` varchar(255) NULL,
 `size` double NULL,
-`create_time` datetime NULL,
-PRIMARY KEY (`dataset_id`) 
+`createTime` datetime NULL,
+PRIMARY KEY (`datasetId`) 
 );
-CREATE TABLE `MLMODEL` (
-`model_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `MLModel` (
+`modelId` int(11) NOT NULL AUTO_INCREMENT,
 `username` varchar(255) NULL,
-`model_name` varchar(255) NULL,
-`detail` blob NULL,
+`modelName` varchar(255) NULL,
 `description` varchar(255) NULL,
-`create_time` datetime NULL,
-PRIMARY KEY (`model_id`) 
+`createTime` datetime NULL,
+`status` int(1) NULL,
+PRIMARY KEY (`modelId`) 
 );
-CREATE TABLE `HISTORY` (
-`train_id` int(11) NOT NULL AUTO_INCREMENT,
-`username` varchar(255) NULL,
-`model_id` int(11) NULL,
-`start_time` datetime NULL,
-`end_time` datetime NULL,
-PRIMARY KEY (`train_id`) 
-);
-CREATE TABLE `POST` (
-`post_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Post` (
+`postId` int(11) NOT NULL AUTO_INCREMENT,
 `username` varchar(255) NULL,
 `title` varchar(255) NULL,
-`model_id` int(11) NULL,
+`modelId` int(11) NULL,
 `content` varchar(1023) NULL,
-`create_time` datetime NULL,
-`like_num` int(11) NULL,
-`reply_num` int(11) NULL,
-`comment_num` int(11) NULL,
+`createTime` datetime NULL,
+`likeNum` int(11) NULL,
+`replyNum` int(11) NULL,
+`commentNum` int(11) NULL,
 `status` int(1) NULL,
-PRIMARY KEY (`post_id`) 
+PRIMARY KEY (`postId`) 
 );
-CREATE TABLE `LIKES` (
-`like_id` int(11) NOT NULL AUTO_INCREMENT,
-`type_id` int(11) NULL,
+CREATE TABLE `Likes` (
+`likeId` int(11) NOT NULL AUTO_INCREMENT,
+`typeId` int(11) NULL,
 `type` int(1) NULL,
 `username` varchar(255) NULL,
 `status` int(1) NULL,
-`create_time` datetime NULL,
-PRIMARY KEY (`like_id`) 
+`createTime` datetime NULL,
+PRIMARY KEY (`likeId`) 
 );
-CREATE TABLE `REPLY` (
-`reply_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Reply` (
+`replyId` int(11) NOT NULL AUTO_INCREMENT,
 `username` varchar(255) NULL,
-`comment_id` int(11) NULL,
+`commentId` int(11) NULL,
 `content` varchar(1023) NULL,
-`create_time` datetime NULL,
+`createTime` datetime NULL,
 `status` int(1) NULL,
-PRIMARY KEY (`reply_id`) 
+PRIMARY KEY (`replyId`) 
 );
-CREATE TABLE `COMMENT` (
-`comment_id` int(11) NOT NULL AUTO_INCREMENT,
-`post_id` int(11) NULL,
+CREATE TABLE `Comment` (
+`commentId` int(11) NOT NULL AUTO_INCREMENT,
+`postId` int(11) NULL,
 `username` varchar(255) NULL,
 `content` varchar(1023) NULL,
-`create_time` datetime NULL,
+`createTime` datetime NULL,
 `status` int(1) NULL,
-PRIMARY KEY (`comment_id`) 
+PRIMARY KEY (`commentId`) 
+);
+CREATE TABLE `ContainerOrder` (
+`containerOrderId` int(11) NOT NULL,
+`money` int(11) NULL,
+`containerId` int(11) NULL,
+`createTime` datetime NULL,
+PRIMARY KEY (`containerOrderId`) 
+);
+CREATE TABLE `Container` (
+`containerId` int(11) NOT NULL,
+`username` varchar(255) NULL,
+`createTime` datetime NULL,
+`invalidTime` datetime NULL,
+PRIMARY KEY (`containerId`) 
 );
 
-ALTER TABLE `DATASET` ADD CONSTRAINT `fk_DATASET` FOREIGN KEY (`username`) REFERENCES `USER` (`username`);
-ALTER TABLE `MLMODEL` ADD CONSTRAINT `fk_MODEL` FOREIGN KEY (`username`) REFERENCES `USER` (`username`);
-ALTER TABLE `HISTORY` ADD CONSTRAINT `fk_HISTORY` FOREIGN KEY (`username`) REFERENCES `USER` (`username`);
-ALTER TABLE `HISTORY` ADD CONSTRAINT `fk_HISTORY_2` FOREIGN KEY (`model_id`) REFERENCES `MLMODEL` (`model_id`);
-ALTER TABLE `POST` ADD CONSTRAINT `fk_POST` FOREIGN KEY (`username`) REFERENCES `USER` (`username`);
-ALTER TABLE `LIKES` ADD CONSTRAINT `fk_LIKE` FOREIGN KEY (`username`) REFERENCES `USER` (`username`);
-ALTER TABLE `REPLY` ADD CONSTRAINT `fk_REPLY` FOREIGN KEY (`username`) REFERENCES `USER` (`username`);
-ALTER TABLE `REPLY` ADD CONSTRAINT `fk_REPLY_1` FOREIGN KEY (`comment_id`) REFERENCES `COMMENT` (`comment_id`);
-ALTER TABLE `COMMENT` ADD CONSTRAINT `fk_COMMENT` FOREIGN KEY (`post_id`) REFERENCES `POST` (`post_id`);
-ALTER TABLE `COMMENT` ADD CONSTRAINT `fk_COMMENT_1` FOREIGN KEY (`username`) REFERENCES `USER` (`username`);
-ALTER TABLE `POST` ADD CONSTRAINT `fk_POST_1` FOREIGN KEY (`model_id`) REFERENCES `MLMODEL` (`model_id`);
+ALTER TABLE `Dataset` ADD CONSTRAINT `fk_DATASET` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
+ALTER TABLE `MLModel` ADD CONSTRAINT `fk_MODEL` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
+ALTER TABLE `Post` ADD CONSTRAINT `fk_POST` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
+ALTER TABLE `Likes` ADD CONSTRAINT `fk_LIKE` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
+ALTER TABLE `Reply` ADD CONSTRAINT `fk_REPLY` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
+ALTER TABLE `Reply` ADD CONSTRAINT `fk_REPLY_1` FOREIGN KEY (`commentId`) REFERENCES `Comment` (`commentId`);
+ALTER TABLE `Comment` ADD CONSTRAINT `fk_COMMENT` FOREIGN KEY (`postId`) REFERENCES `Post` (`postId`);
+ALTER TABLE `Comment` ADD CONSTRAINT `fk_COMMENT_1` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
+ALTER TABLE `Post` ADD CONSTRAINT `fk_POST_1` FOREIGN KEY (`modelId`) REFERENCES `MLModel` (`modelId`);
+ALTER TABLE `Container` ADD CONSTRAINT `fk_Container` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
+ALTER TABLE `ContainerOrder` ADD CONSTRAINT `fk_ContainerOrder` FOREIGN KEY (`containerId`) REFERENCES `Container` (`containerId`);
 

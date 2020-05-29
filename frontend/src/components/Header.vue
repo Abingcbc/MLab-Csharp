@@ -8,7 +8,7 @@
                 <img src="../../public/logo_word.png" alt="" width="80" height="60"/>
             </el-menu-item>
             <el-menu-item @click.native="lab">
-                画板
+                实验
             </el-menu-item>
             <el-menu-item @click.native="community">
                 社区
@@ -31,7 +31,7 @@
                 </template>
                 <el-menu-item v-if="!isLogin" @click.native="login">登录</el-menu-item>
                 <el-menu-item v-if="isLogin" @click.native="profile">个人中心</el-menu-item>
-                <el-menu-item v-if="isLogin" @click.native="myModel">我的模型</el-menu-item>
+                <el-menu-item v-if="isLogin" @click.native="myModel">我的容器</el-menu-item>
                 <el-menu-item v-if="isLogin" @click.native="myPost">我的文章</el-menu-item>
                 <el-menu-item v-if="isLogin">退出</el-menu-item>
             </el-submenu>
@@ -78,10 +78,10 @@
                 this.$router.push('/profile')
             },
             myModel() {
-                this.$router.push('/myModel')
+                this.$router.push('/model')
             },
             myPost() {
-                this.$router.push('/myPost')
+                this.$router.push('/post')
             }
         }
     }
