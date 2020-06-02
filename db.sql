@@ -1,25 +1,3 @@
-ALTER TABLE `Dataset` DROP FOREIGN KEY `fk_DATASET`;
-ALTER TABLE `MLModel` DROP FOREIGN KEY `fk_MODEL`;
-ALTER TABLE `Post` DROP FOREIGN KEY `fk_POST`;
-ALTER TABLE `Likes` DROP FOREIGN KEY `fk_LIKE`;
-ALTER TABLE `Reply` DROP FOREIGN KEY `fk_REPLY`;
-ALTER TABLE `Reply` DROP FOREIGN KEY `fk_REPLY_1`;
-ALTER TABLE `Comment` DROP FOREIGN KEY `fk_COMMENT`;
-ALTER TABLE `Comment` DROP FOREIGN KEY `fk_COMMENT_1`;
-ALTER TABLE `Post` DROP FOREIGN KEY `fk_POST_1`;
-ALTER TABLE `Container` DROP FOREIGN KEY `fk_Container`;
-ALTER TABLE `ContainerOrder` DROP FOREIGN KEY `fk_ContainerOrder`;
-
-DROP TABLE `User`;
-DROP TABLE `Dataset`;
-DROP TABLE `MLModel`;
-DROP TABLE `Post`;
-DROP TABLE `Likes`;
-DROP TABLE `Reply`;
-DROP TABLE `Comment`;
-DROP TABLE `ContainerOrder`;
-DROP TABLE `Container`;
-
 CREATE TABLE `User` (
 `username` varchar(255) NOT NULL,
 `password` varchar(255) NOT NULL,
@@ -83,13 +61,6 @@ CREATE TABLE `Comment` (
 `status` int(1) NULL,
 PRIMARY KEY (`commentId`) 
 );
-CREATE TABLE `ContainerOrder` (
-`containerOrderId` int(11) NOT NULL,
-`money` int(11) NULL,
-`containerId` int(11) NULL,
-`createTime` datetime NULL,
-PRIMARY KEY (`containerOrderId`) 
-);
 CREATE TABLE `Container` (
 `containerId` int(11) NOT NULL,
 `username` varchar(255) NULL,
@@ -108,5 +79,4 @@ ALTER TABLE `Comment` ADD CONSTRAINT `fk_COMMENT` FOREIGN KEY (`postId`) REFEREN
 ALTER TABLE `Comment` ADD CONSTRAINT `fk_COMMENT_1` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
 ALTER TABLE `Post` ADD CONSTRAINT `fk_POST_1` FOREIGN KEY (`modelId`) REFERENCES `MLModel` (`modelId`);
 ALTER TABLE `Container` ADD CONSTRAINT `fk_Container` FOREIGN KEY (`username`) REFERENCES `User` (`username`);
-ALTER TABLE `ContainerOrder` ADD CONSTRAINT `fk_ContainerOrder` FOREIGN KEY (`containerId`) REFERENCES `Container` (`containerId`);
 

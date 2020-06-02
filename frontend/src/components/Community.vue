@@ -1,15 +1,15 @@
 <template>
     <el-container style="margin-right: 100px; margin-left: 100px">
         <el-main>
-            <el-card id="post" v-for="postData in postList" :key="postData.id">
+            <el-card class="post" v-for="postData in postList" :key="postData.id">
                 <el-row style="font-size: 30px">{{ postData.title }}</el-row>
                 <el-row>
                     <el-avatar :src="postData.avatarUrl" :size="20"/>
                     {{ postData.author}}
                 </el-row>
                 <el-container>
-                    <el-aside style="width: 150px">
-                        <img :src="postData.image" alt=""/>
+                    <el-aside>
+                        <img :src="postData.image" alt="" style="size: 150px"/>
                     </el-aside>
                     <el-main>
                         {{ postData.content }}...
@@ -100,7 +100,7 @@
 </script>
 
 <style>
-#post {
+.post {
     margin-bottom: 10px;
 }
 </style>

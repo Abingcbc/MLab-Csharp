@@ -1,11 +1,10 @@
 <template>
     <div style="margin-left: 200px;margin-right: 200px;">
-
         <el-card class="post" v-for="postData in postList" :key="postData.id">
             <el-row style="font-size: 30px">{{ postData.title }}</el-row>
             <el-container>
-                <el-aside style="width: 150px">
-                    <img :src="postData.image" alt=""/>
+                <el-aside>
+                    <img :src="postData.image" alt="" style="size: 150px"/>
                 </el-aside>
                 <el-main>
                     {{ postData.content }}...
@@ -17,16 +16,6 @@
                     <el-button type="danger" icon="el-icon-delete" circle/>
                 </el-aside>
             </el-container>
-            <el-row>
-                <el-col :span="1">
-                    <el-icon class="el-icon-thumb"/>
-                    {{ postData.like }}
-                </el-col>
-                <el-col :span="1">
-                    <el-icon class="el-icon-chat-dot-square"/>
-                    {{ postData.comment }}
-                </el-col>
-            </el-row>
         </el-card>
         <el-pagination
                 background
@@ -73,7 +62,4 @@
 </script>
 
 <style>
-#post {
-    width: 10%;
-}
 </style>

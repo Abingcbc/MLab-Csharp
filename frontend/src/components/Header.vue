@@ -31,8 +31,9 @@
                 </template>
                 <el-menu-item v-if="!isLogin" @click.native="login">登录</el-menu-item>
                 <el-menu-item v-if="isLogin" @click.native="profile">个人中心</el-menu-item>
-                <el-menu-item v-if="isLogin" @click.native="myModel">我的容器</el-menu-item>
+                <el-menu-item v-if="isLogin" @click.native="myContainer">我的容器</el-menu-item>
                 <el-menu-item v-if="isLogin" @click.native="myPost">我的文章</el-menu-item>
+                <el-menu-item v-if="isLogin" @click.native="myData">我的数据</el-menu-item>
                 <el-menu-item v-if="isLogin">退出</el-menu-item>
             </el-submenu>
         </el-menu>
@@ -77,11 +78,14 @@
             profile() {
                 this.$router.push('/profile')
             },
-            myModel() {
-                this.$router.push('/model')
+            myContainer() {
+                this.$router.push('/container')
             },
             myPost() {
                 this.$router.push('/post')
+            },
+            myData(){
+                this.$router.push('/data')
             }
         }
     }

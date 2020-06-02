@@ -3,7 +3,6 @@
 **/.env
 **/.git
 **/.gitignore
-**/.gitattributes
 **/.project
 **/.settings
 **/.toolstarget
@@ -24,4 +23,3 @@
 **/values.dev.yaml
 LICENSE
 README.md
-TODO.html
