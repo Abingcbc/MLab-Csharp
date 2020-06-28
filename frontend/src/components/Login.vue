@@ -22,7 +22,6 @@
 </template>
 
 <script>
-    // import http from 'axios';
 
     export default {
         name: "Login",
@@ -30,14 +29,31 @@
             return {
                 username: '',
                 password: '',
-                error: false,
-                errorShake: false
+            }
+        },
+        mounted() {
+            if (localStorage.getItem("mlabUser")) {
+                this.$router.push('/');
             }
         },
         methods: {
             login() {
-                this.error = false;
-                console.log("login")
+                this.$axios({
+                    method: "POST",
+                    url: "/api/login",
+                    data: {
+                        username: this.username,
+                        password: this.password
+                    }
+                }).then((response) => {
+                    if (response.data["message"] === "success") {
+                        localStorage.setItem("mlabUser", this.username);
+                        localStorage.setItem("mlabToken", response.data["content"]);
+                        window.location.reload();
+                    } else {
+                        alert(response.data["content"]);
+                    }
+                })
             },
             register() {
                 this.$router.push('/register')

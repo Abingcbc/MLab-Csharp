@@ -7,6 +7,14 @@
                       v-model="value"
                       @imgAdd="$imgAdd"
         />
+        <el-select v-model="containerId" placeholder="选择分享的容器" style="margin-top: 30px">
+            <el-option
+                    v-for="item in containerList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+        </el-select>
         <div style="text-align: center; margin-top: 30px">
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item>
@@ -25,19 +33,26 @@
         data() {
             return {
                 value: '',
-                form: {}
+                form: {},
+                containerList: [],
+                containerId: 0
             }
+        },
+        mounted() {
+            this.loadContainer()
         },
         methods: {
             $imgAdd(pos, $file) {
                 var formdata = new FormData();
                 formdata.append('smfile', $file);
+                formdata.append('format', 'json');
                 this.$axios({
-                    method: 'post',
-                    url: '/image',
+                    method: 'POST',
+                    url: '/image/upload',
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': 'ZNtF4YN9va6lBsSKpg31PKlkOCZIcEsC'
+                        'Authorization': 'Basic RQdNo5KAYxKItjZt36FyFPutENVaJQZ2',
+                        'Accept': '*/*',
                     },
                     data: formdata
                 }).then((response) => {
@@ -51,18 +66,40 @@
                 })
             },
             onSubmit() {
-                this.$router.push('/community')
-                // this.$axios({
-                //     method: 'post',
-                //     url: '/server/community-service/post/publish',
-                //     data: {
-                //         username: localStorage.getItem('username'),
-                //         title: this.value.split('\n')[0],
-                //         content: this.value,
-                //     }
-                // }).then(() => {
-                //     this.$router.push('/society')
-                // })
+                this.$axios({
+                    method: 'POST',
+                    url: '/api/PostPost',
+                    data: {
+                        username: localStorage.getItem('mlabUser'),
+                        title: this.value.split('\n')[0],
+                        content: this.value,
+                        containerId: this.containerId
+                    }
+                }).then((response) => {
+                    if (response.data['message'] === 'success') {
+                        this.$router.push('/community')
+                    } else {
+                        alert("创建失败！请稍后重试！")
+                    }
+                })
+            },
+            loadContainer() {
+                let username = localStorage.getItem("mlabUser");
+                if (!username) {
+                    this.$router.push("/login");
+                }
+                this.$axios({
+                    method: "GET",
+                    url: "/api/Containers/GetContainer/"+localStorage.getItem("mlabUser")
+                }).then((response) => {
+                    let containers = response.data['content']
+                    for (let i = 0; i < containers.length; i++) {
+                        this.containerList.push({
+                            value: containers[i].containerId,
+                            label: containers[i].containerName
+                        })
+                    }
+                })
             }
         }
     }

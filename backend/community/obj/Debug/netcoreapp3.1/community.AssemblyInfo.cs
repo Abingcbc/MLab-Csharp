@@ -12,12 +12,12 @@ using System;
 using System.Reflection;
 
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("7f81532b-206f-4028-ab6a-315a4a3fe039")]
-[assembly: System.Reflection.AssemblyCompanyAttribute("community")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Community")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("community")]
-[assembly: System.Reflection.AssemblyTitleAttribute("community")]
+[assembly: System.Reflection.AssemblyProductAttribute("Community")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Community")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // 由 MSBuild WriteCodeFragment 类生成。

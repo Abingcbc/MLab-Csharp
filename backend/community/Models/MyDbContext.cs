@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace community.Models
+namespace Community.Models
 {
     public partial class MyDbContext : DbContext
     {
@@ -17,11 +17,8 @@ namespace community.Models
 
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Container> Container { get; set; }
-        public virtual DbSet<Dataset> Dataset { get; set; }
         public virtual DbSet<Likes> Likes { get; set; }
-        public virtual DbSet<Mlmodel> Mlmodel { get; set; }
         public virtual DbSet<Post> Post { get; set; }
-        public virtual DbSet<Reply> Reply { get; set; }
         public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -95,13 +92,19 @@ namespace community.Models
                     .HasColumnName("containerId")
                     .HasColumnType("int(11)");
 
+                entity.Property(e => e.ContainerName)
+                    .HasColumnName("containerName")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("latin1")
+                    .HasCollation("latin1_swedish_ci");
+
                 entity.Property(e => e.CreateTime)
                     .HasColumnName("createTime")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.InvalidTime)
-                    .HasColumnName("invalidTime")
-                    .HasColumnType("datetime");
+                entity.Property(e => e.Type)
+                    .HasColumnName("type")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Username)
                     .HasColumnName("username")
@@ -115,53 +118,15 @@ namespace community.Models
                     .HasConstraintName("fk_Container");
             });
 
-            modelBuilder.Entity<Dataset>(entity =>
-            {
-                entity.ToTable("dataset");
-
-                entity.HasIndex(e => e.Username)
-                    .HasName("fk_DATASET");
-
-                entity.Property(e => e.DatasetId)
-                    .HasColumnName("datasetId")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.CreateTime)
-                    .HasColumnName("createTime")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.DatasetName)
-                    .HasColumnName("datasetName")
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("latin1")
-                    .HasCollation("latin1_swedish_ci");
-
-                entity.Property(e => e.Format)
-                    .HasColumnName("format")
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("latin1")
-                    .HasCollation("latin1_swedish_ci");
-
-                entity.Property(e => e.Size).HasColumnName("size");
-
-                entity.Property(e => e.Username)
-                    .HasColumnName("username")
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("latin1")
-                    .HasCollation("latin1_swedish_ci");
-
-                entity.HasOne(d => d.UsernameNavigation)
-                    .WithMany(p => p.Dataset)
-                    .HasForeignKey(d => d.Username)
-                    .HasConstraintName("fk_DATASET");
-            });
-
             modelBuilder.Entity<Likes>(entity =>
             {
                 entity.HasKey(e => e.LikeId)
                     .HasName("PRIMARY");
 
                 entity.ToTable("likes");
+
+                entity.HasIndex(e => e.PostId)
+                    .HasName("likes_post_postId_fk");
 
                 entity.HasIndex(e => e.Username)
                     .HasName("fk_LIKE");
@@ -174,23 +139,24 @@ namespace community.Models
                     .HasColumnName("createTime")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.PostId)
+                    .HasColumnName("postId")
+                    .HasColumnType("int(11)");
+
                 entity.Property(e => e.Status)
                     .HasColumnName("status")
                     .HasColumnType("int(1)");
-
-                entity.Property(e => e.Type)
-                    .HasColumnName("type")
-                    .HasColumnType("int(1)");
-
-                entity.Property(e => e.TypeId)
-                    .HasColumnName("typeId")
-                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Username)
                     .HasColumnName("username")
                     .HasColumnType("varchar(255)")
                     .HasCharSet("latin1")
                     .HasCollation("latin1_swedish_ci");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.Likes)
+                    .HasForeignKey(d => d.PostId)
+                    .HasConstraintName("likes_post_postId_fk");
 
                 entity.HasOne(d => d.UsernameNavigation)
                     .WithMany(p => p.Likes)
@@ -198,57 +164,11 @@ namespace community.Models
                     .HasConstraintName("fk_LIKE");
             });
 
-            modelBuilder.Entity<Mlmodel>(entity =>
-            {
-                entity.HasKey(e => e.ModelId)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("mlmodel");
-
-                entity.HasIndex(e => e.Username)
-                    .HasName("fk_MODEL");
-
-                entity.Property(e => e.ModelId)
-                    .HasColumnName("modelId")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.CreateTime)
-                    .HasColumnName("createTime")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.Description)
-                    .HasColumnName("description")
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("latin1")
-                    .HasCollation("latin1_swedish_ci");
-
-                entity.Property(e => e.ModelName)
-                    .HasColumnName("modelName")
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("latin1")
-                    .HasCollation("latin1_swedish_ci");
-
-                entity.Property(e => e.Status)
-                    .HasColumnName("status")
-                    .HasColumnType("int(1)");
-
-                entity.Property(e => e.Username)
-                    .HasColumnName("username")
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("latin1")
-                    .HasCollation("latin1_swedish_ci");
-
-                entity.HasOne(d => d.UsernameNavigation)
-                    .WithMany(p => p.Mlmodel)
-                    .HasForeignKey(d => d.Username)
-                    .HasConstraintName("fk_MODEL");
-            });
-
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.ToTable("post");
 
-                entity.HasIndex(e => e.ModelId)
+                entity.HasIndex(e => e.ContainerId)
                     .HasName("fk_POST_1");
 
                 entity.HasIndex(e => e.Username)
@@ -260,6 +180,10 @@ namespace community.Models
 
                 entity.Property(e => e.CommentNum)
                     .HasColumnName("commentNum")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.ContainerId)
+                    .HasColumnName("containerId")
                     .HasColumnType("int(11)");
 
                 entity.Property(e => e.Content)
@@ -274,14 +198,6 @@ namespace community.Models
 
                 entity.Property(e => e.LikeNum)
                     .HasColumnName("likeNum")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.ModelId)
-                    .HasColumnName("modelId")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.ReplyNum)
-                    .HasColumnName("replyNum")
                     .HasColumnType("int(11)");
 
                 entity.Property(e => e.Status)
@@ -300,64 +216,10 @@ namespace community.Models
                     .HasCharSet("latin1")
                     .HasCollation("latin1_swedish_ci");
 
-                entity.HasOne(d => d.Model)
-                    .WithMany(p => p.Post)
-                    .HasForeignKey(d => d.ModelId)
-                    .HasConstraintName("fk_POST_1");
-
                 entity.HasOne(d => d.UsernameNavigation)
                     .WithMany(p => p.Post)
                     .HasForeignKey(d => d.Username)
                     .HasConstraintName("fk_POST");
-            });
-
-            modelBuilder.Entity<Reply>(entity =>
-            {
-                entity.ToTable("reply");
-
-                entity.HasIndex(e => e.CommentId)
-                    .HasName("fk_REPLY_1");
-
-                entity.HasIndex(e => e.Username)
-                    .HasName("fk_REPLY");
-
-                entity.Property(e => e.ReplyId)
-                    .HasColumnName("replyId")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.CommentId)
-                    .HasColumnName("commentId")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.Content)
-                    .HasColumnName("content")
-                    .HasColumnType("varchar(1023)")
-                    .HasCharSet("latin1")
-                    .HasCollation("latin1_swedish_ci");
-
-                entity.Property(e => e.CreateTime)
-                    .HasColumnName("createTime")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.Status)
-                    .HasColumnName("status")
-                    .HasColumnType("int(1)");
-
-                entity.Property(e => e.Username)
-                    .HasColumnName("username")
-                    .HasColumnType("varchar(255)")
-                    .HasCharSet("latin1")
-                    .HasCollation("latin1_swedish_ci");
-
-                entity.HasOne(d => d.Comment)
-                    .WithMany(p => p.Reply)
-                    .HasForeignKey(d => d.CommentId)
-                    .HasConstraintName("fk_REPLY_1");
-
-                entity.HasOne(d => d.UsernameNavigation)
-                    .WithMany(p => p.Reply)
-                    .HasForeignKey(d => d.Username)
-                    .HasConstraintName("fk_REPLY");
             });
 
             modelBuilder.Entity<User>(entity =>

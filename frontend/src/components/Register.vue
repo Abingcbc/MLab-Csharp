@@ -13,19 +13,14 @@
                     <el-input type="password" :placeholder="'重复密码'" v-model="rPassword" clearable/>
                 </el-form-item>
                 <el-form-item style="text-align: center">
-                    <el-button type="primary" @click="register" round>
-                        登录
-                    </el-button>
-                    <el-button type="text">注册</el-button>
+                    <el-button type="text" @click="register">注册</el-button>
                 </el-form-item>
             </el-form>
-
         </div>
     </div>
 </template>
 
 <script>
-    // import http from 'axios';
 
     export default {
         name: "Register",
@@ -34,14 +29,31 @@
                 username: '',
                 password: '',
                 rPassword: '',
-                error: false,
-                errorShake: false
             }
         },
         methods: {
             register() {
-                this.error = false;
-                console.log("register")
+                if (this.password !== this.rPassword) {
+                    alert("两次密码输入不同！");
+                    return
+                }
+                this.$axios({
+                    method: "POST",
+                    url: "/api/register",
+                    data: {
+                        username: this.username,
+                        password: this.password
+                    }
+                }).then((response) => {
+                    if (response.data["message"] === "success") {
+                        localStorage.setItem("mlabUser", this.username);
+                        localStorage.setItem("mlabToken", response.data["content"]);
+                        window.location.reload();
+                        this.$router.push('/');
+                    } else {
+                        alert(response.data["content"]);
+                    }
+                })
             }
         }
     }

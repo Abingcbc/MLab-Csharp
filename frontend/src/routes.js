@@ -11,7 +11,7 @@ import PostDetail from "@/components/PostDetail";
 import Profile from "@/components/Profile";
 import Post from "@/components/Post";
 import Container from "./components/Container";
-import MLData from "./components/MLData";
+import LikePost from "./components/LikePost";
 
 Vue.use(Router);
 
@@ -28,7 +28,7 @@ export default new Router({
         {path: '/postDetail', component: PostDetail},
         {path: '/profile', component: Profile},
         {path: '/post', component: Post},
-        {path: '/container', component: Container},
-        {path: '/data', component: MLData}
+        {path: '/likePost', component: LikePost},
+        {path: '/container', component: Container}
     ]
 });

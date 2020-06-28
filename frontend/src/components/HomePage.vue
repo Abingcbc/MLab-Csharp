@@ -7,7 +7,7 @@
                                   :key="picture"
                                   style="height: 500px"
                                   >
-                    <el-image :src="picture">
+                    <el-image :src="picture" style="height: 500px; width: 100%">
                         <div slot="placeholder" class="image-slot">
                             加载中<span class="dot">...</span>
                         </div>
@@ -34,15 +34,15 @@
             return {
                 pictures: [
                     '/example.jpg',
-                    '/logo_figure.png',
-                    '/logo_word.png',
+                    '/example2.jpg',
+                    '/example3.jpg',
                 ]
             }
         },
         methods: {
             start() {
-                if (localStorage.getItem("token")) {
-                    this.$router.push('/lab')
+                if (localStorage.getItem("mlabUser")) {
+                    this.$router.push('/container')
                 } else {
                     this.$router.push('/login')
                 }

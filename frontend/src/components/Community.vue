@@ -1,19 +1,18 @@
 <template>
-    <el-container style="margin-right: 100px; margin-left: 100px">
+    <el-container style="margin-right: 300px; margin-left: 300px">
         <el-main>
-            <el-card class="post" v-for="postData in postList" :key="postData.id">
+            <el-card class="post" v-for="postData in postList" :key="postData.postId">
                 <el-row style="font-size: 30px">{{ postData.title }}</el-row>
                 <el-row>
-                    <el-avatar :src="postData.avatarUrl" :size="20"/>
                     {{ postData.author}}
                 </el-row>
                 <el-container>
                     <el-aside>
-                        <img :src="postData.image" alt="" style="size: 150px"/>
+                        <img :src=typeToImage(postData) alt="" style="size: 150px"/>
                     </el-aside>
                     <el-main>
                         {{ postData.content }}...
-                        <el-button type="text" @click.native="detail(postData.id)">
+                        <el-button type="text" @click.native="detail(postData.postId)">
                             查看详情
                         </el-button>
                     </el-main>
@@ -21,11 +20,11 @@
                 <el-row>
                     <el-col :span="1">
                         <el-icon class="el-icon-thumb"/>
-                        {{ postData.like }}
+                        {{ postData.likeNum }}
                     </el-col>
                     <el-col :span="1">
                         <el-icon class="el-icon-chat-dot-square"/>
-                        {{ postData.comment }}
+                        {{ postData.commentNum }}
                     </el-col>
                 </el-row>
             </el-card>
@@ -37,11 +36,6 @@
                     layout="total, prev, pager, next">
             </el-pagination>
         </el-main>
-        <el-aside width="300px" style="margin-top: 20px;">
-            <el-card>
-                hot
-            </el-card>
-        </el-aside>
     </el-container>
 </template>
 
@@ -52,7 +46,7 @@
             return {
                 postList: [],
                 currentPage: 1,
-                totalPost: 100
+                totalPost: 0
             }
         },
         mounted() {
@@ -65,17 +59,27 @@
         methods: {
             init() {
                 this.currentPage = parseInt(this.$router.app.$route.query.page);
+                let keyword = this.$router.app.$route.query.search;
                 this.postList = [];
-                for (let i = 0; i < 10; i++) {
-                    this.postList.push({
-                        id: i,
-                        title: this.currentPage.toString(),
-                        image: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-                        avatarUrl: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-                        author: "adsfasdf",
-                        content: "asdfasdaskdgh;aksdhgj",
-                        like: 1,
-                        comment: 1
+                if (keyword) {
+                    this.$axios({
+                        method: "GET",
+                        url: "/api/SearchPost",
+                        params: {
+                            "keyword": keyword
+                        }
+                    }).then((response) => {
+                        this.postList = response.data['content'];
+                        this.totalPost = this.postList.length;
+                    })
+                } else {
+                    this.$axios({
+                        method: "GET",
+                        url: "/api/GetPost"
+                    }).then((response) => {
+                        this.postList = response.data['content'];
+                        this.totalPost = this.postList.length;
+                        console.log(this.postList)
                     })
                 }
             },
@@ -94,6 +98,17 @@
             },
             detail(id) {
                 this.$router.push('/postDetail?id='+id.toString());
+            },
+            typeToImage(post) {
+                if (!post.container)
+                {
+                    return "./empty.png";
+                }
+                if (post.container.type === 0) {
+                    return "./python.png";
+                } else {
+                    return "./tensorflow.png";
+                }
             }
         }
     }
