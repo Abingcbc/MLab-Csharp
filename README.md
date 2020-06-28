@@ -59,13 +59,13 @@
 
 ### 程序集
 
-![image-20200627115818877](E:\Project\C#\MLab-Csharp\image-20200627115818877.png)
+![image-20200627115818877](./image-20200627115818877.png)
 
 MLab项目实现了7个程序集。其中COMLib为COM组件项目，Community, ContainerCenter 和 ContainerManagement 为 Asp.Net Core Web Api项目，LogWriter为C++/CLI项目，ResponseUtils为.Net Standard2.0的共享程序集，SystemMonitor为Win32dll项目。
 
 ### 项目架构
 
-![image-20200627120238821](E:\Project\C#\MLab-Csharp\image-20200627120238821.png)
+![image-20200627120238821](./image-20200627120238821.png)
 
 项目前端采用Vue实现，社区模块，容器注册，容器管理为三个独立的.Net Core应用，可以分别部署。
 
@@ -123,6 +123,6 @@ MLab项目实现了7个程序集。其中COMLib为COM组件项目，Community, C
    );
    ```
 
-3. ![image-20200627130646001](E:\Project\C#\MLab-Csharp\image-20200627130646001.png)
+3. ![image-20200627130646001](./image-20200627130646001.png)
 
    解决：两个程序集目标框架不同，同时，.Net Core仅从3.1版本开始支持C++/CLI
